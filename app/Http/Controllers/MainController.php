@@ -8,6 +8,7 @@ use App\Log;
 use App\MessageRelay;
 use App\Topic;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class MainController extends Controller
 {
@@ -16,7 +17,7 @@ class MainController extends Controller
     {
         $this->validate($request, [
             'title' => 'required|max:255',
-            'join_code' => 'required|max:255',
+            'join_code' => 'required|max:255'
         ]);
 
         $topic = new Topic;
@@ -30,9 +31,32 @@ class MainController extends Controller
         $topic->pn = $request->pn;
 
         $topic->save();
-        
+
         return redirect()->route('dashboard');
-        
+    }
+    public function add_api_on_demand(Request $request)
+    {
+        $this->validate($request, [
+            'your_system_id' => 'required|max:255',
+            'title' => 'required|max:255',
+            'short_message' => 'required',
+            'long_message' => 'required',
+            'action_url' => 'required'
+        ]);
+
+        $relay = new MessageRelay;
+        $relay->topic_id = $request->topic_id;
+        $relay->title = $request->title;
+        $relay->short_message = $request->short_message;
+        $relay->long_message = $request->long_message;
+        $relay->action_url = $request->action_url;
+        $relay->your_system_id = $request->your_system_id;
+        $relay->end_point = $request->end_point;
+        $relay->secret = $request->secret;
+
+        $relay->save();
+
+        return redirect()->route('dashboard');
     }
 
     public function add_not_pinged(Request $request)
@@ -41,7 +65,7 @@ class MainController extends Controller
             'title' => 'required|max:255',
             'join_code' => 'required|max:255',
             'occurance' => 'required',
-            'intervals' => 'required',
+            'intervals' => 'required'
         ]);
         $request->title;
         $request->join_code;
@@ -53,12 +77,27 @@ class MainController extends Controller
         $request->pn;
         exit;
     }
+
     public function dashboard()
     {
+        
+//        $topics = Topic::all();
+        $topics = DB::table('topics')->get();
+        
+        return view('dashboard', ['topics' => $topics, 'topic_id'=> 0]);
+    }
+
+    public function topic_detail($topic_id)
+    {
+        $topic_details = MessageRelay::where('topic_id', $topic_id)->take(10)->get();
         $topics = Topic::all();
 
-        return view('dashboard', ['topics' => $topics]);
-        
+        return view('dashboard', ['topics' => $topics, 'details' => $topic_details,
+                'topic_id'=> $topic_id ]);
+    }
+    public function api($topic_id)
+    {
+        return view('api_on_demand', ['topic_id' => $topic_id ]);
     }
 
 }

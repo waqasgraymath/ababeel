@@ -6,6 +6,7 @@
             <file>file:/opt/lampp/htdocs/ababeel/resources/views/not_pinged.blade.php</file>
             <file>file:/opt/lampp/htdocs/ababeel/database/migrations/2016_08_15_134341_create_logs_table.php</file>
             <file>file:/opt/lampp/htdocs/ababeel/database/seeds/DatabaseSeeder.php</file>
+            <file>file:/opt/lampp/htdocs/ababeel/resources/views/api_on_demand.blade.php</file>
             <file>file:/opt/lampp/htdocs/ababeel/database/migrations/2014_10_12_100000_create_password_resets_table.php</file>
             <file>file:/opt/lampp/htdocs/ababeel/app/Http/routes.php</file>
             <file>file:/opt/lampp/htdocs/ababeel/resources/views/on_demand.blade.php</file>
