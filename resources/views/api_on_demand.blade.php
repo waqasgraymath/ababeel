@@ -25,10 +25,10 @@ and open the template in the editor.
             <form action="{{ route('api_on_demand_store') }}" method="post" >
                 <table>
                     <tr><th></th><th></th></tr>
-                    <tr><td>Your API Secret</td><td><input disabled="disabled" type="text" id="secret" 
+                    <tr><td>Your API Secret</td><td><input readonly="readonly" type="text" id="secret" 
                                                            value="<?php echo rand('1000', '50000'); ?>" 
                         name="secret" /></td></tr>
-                    <tr><td>End Point</td><td><input type="text" disabled="disabled"
+                    <tr><td>End Point</td><td><input type="text" readonly="readonly"
                             value="api/relay/<?php echo $topic_id; ?>" id="end_point" name="end_point" /></td></tr>
                     <br />
 
@@ -39,7 +39,7 @@ and open the template in the editor.
                     <tr><td>Action Url</td><td><input type="text" id="action_url" name="action_url" /></td></tr>
                     <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                     <input type="hidden" name="topic_id" value="<?php echo $topic_id; ?>">
-                    <tr><td></td><td><input type="submit" value="submit" /></td></tr>
+                    <tr><td></td><td><input type="submit" value="create" /></td></tr>
                 </table>
             </form>
         </div>

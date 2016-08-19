@@ -32,8 +32,9 @@ class MainController extends Controller
 
         $topic->save();
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard', ['id' => $topic->id]);
     }
+
     public function add_api_on_demand(Request $request)
     {
         $this->validate($request, [
@@ -56,7 +57,20 @@ class MainController extends Controller
 
         $relay->save();
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard', ['id' => $request->topic_id]);
+    }
+
+    public function add_api_ping_check(Request $request)
+    {
+
+        $relay = new MessageRelay;
+        $relay->topic_id = $request->topic_id;
+        $relay->end_point = $request->end_point;
+        $relay->secret = $request->secret;
+
+        $relay->save();
+
+        return redirect()->route('dashboard', ['id' => $request->topic_id]);
     }
 
     public function add_not_pinged(Request $request)
@@ -67,24 +81,41 @@ class MainController extends Controller
             'occurance' => 'required',
             'intervals' => 'required'
         ]);
-        $request->title;
-        $request->join_code;
-        $request->occurance;
-        $request->intervals;
-        $request->active;
-        $request->email;
-        $request->sms;
-        $request->pn;
-        exit;
+        $topic = new Topic;
+        $topic->title = $request->title;
+        $topic->owner_id = 1; // THe id of the user who is logged in
+        $topic->join_code = $request->join_code;
+        $topic->relay = 'if not pinged';
+        $topic->active = $request->active;
+        $topic->email = $request->email;
+        $topic->sms = $request->sms;
+        $topic->pn = $request->pn;
+        $topic->occurance = $request->occurance;
+        $topic->intervals = $request->intervals;
+
+        $topic->save();
+
+        return redirect()->route('dashboard', ['id' => $topic->id]);
     }
 
-    public function dashboard()
+    public function dashboard($topic_id = 0)
     {
-        
+
 //        $topics = Topic::all();
-        $topics = DB::table('topics')->get();
-        
-        return view('dashboard', ['topics' => $topics, 'topic_id'=> 0]);
+        if ($topic_id != 0)
+        {
+            $topic_details = MessageRelay::where('topic_id', $topic_id)->take(10)->get();
+            $topics = DB::table('topics')->get();
+
+            return view('dashboard', ['topics' => $topics, 'details' => $topic_details,
+                'topic_id' => $topic_id]);
+        }
+        else
+        {
+            $topics = DB::table('topics')->get();
+
+            return view('dashboard', ['topics' => $topics, 'topic_id' => $topic_id]);
+        }
     }
 
     public function topic_detail($topic_id)
@@ -93,11 +124,23 @@ class MainController extends Controller
         $topics = Topic::all();
 
         return view('dashboard', ['topics' => $topics, 'details' => $topic_details,
-                'topic_id'=> $topic_id ]);
+            'topic_id' => $topic_id]);
     }
-    public function api($topic_id)
+
+    public function api($topic_id, $relay)
     {
-        return view('api_on_demand', ['topic_id' => $topic_id ]);
+        if ($relay == 'on demand')
+        {
+            return view('api_on_demand', ['topic_id' => $topic_id]);
+        }
+        else if ($relay == 'if not pinged')
+        {
+            return view('api_ping_check', ['topic_id' => $topic_id]);
+        }
+        else if ($relay == 'default')
+        {
+            return redirect()->route('dashboard');
+        }
     }
 
 }

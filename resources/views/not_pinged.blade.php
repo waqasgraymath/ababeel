@@ -31,7 +31,13 @@ and open the template in the editor.
                     <tr><td>Threshold</td>
                         <td>
                             <input type="text" id="occurance" name="occurance" />Times in
-                            <input type="text" id="intervals" name="intervals" />
+                            <select id="intervals" name="intervals" >
+                                <option value="minutes" >minutes</option>
+                                <option value="hours" >hours</option>
+                                <option value="days" >days</option>
+                                <option value="weeks" >weeks</option>
+                                <option value="months" >months</option>
+                            </select>
                         </td>
                     </tr>
                     <tr><td>Email</td><td><input type="checkbox" value="1" id="email" name="email" /></td></tr>

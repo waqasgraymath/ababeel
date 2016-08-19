@@ -16,48 +16,61 @@ and open the template in the editor.
         <table>
             <tr><th>Topics</th></tr>
             <tr>
-                <td>
-                    <?php foreach ($topics as $topic) { 
+                <td><ul>
+                    <?php 
+                    $relay = 'default';
+                    foreach ($topics as $topic) { 
+                        
                             if ($topic->id == $topic_id) { ?>
-                                <i>
+                        <li><i>
                                     <a href="{{ URL::to('/topic_detail/'.$topic->id) }}" >
                                         <?php print_r($topic->title); ?>
                                     </a>
                                 </i>
-                            <?php }else { ?>
+                            </li>
+                            <?php 
+                            
+                            $relay = $topic->relay;
+                            
+                            }else { ?>
+                            <li>
                                 <a href="{{ URL::to('/topic_detail/'.$topic->id) }}" >
                                     <?php print_r($topic->title); ?>
                                 </a>
+                            </li>
                             <?php } } ?>
+                </ul>
                 </td>
                 <td>
                     <table>
                         <tr>
                             <td><table>
-                                    <tr><td>
+                                    <tr><th>as</th></tr>
+                                    <tr>
                                             <?php
                                             if (isset($details))
                                             {
                                                 foreach ($details as $detail)
                                                 {
                                                     ?>
-                                                    <?php echo $detail->title ?>
-                                                    <?php echo $detail->short_message ?>
-                                                    <?php echo $detail->long_message ?>
-                                                    <?php echo $detail->action_url ?>
-                                                    <?php echo $detail->end_point ?>
-                                                    <?php echo $detail->secret ?>
+                                                    <td><?php echo $detail->title ?></td>
+                                                    <td><?php echo $detail->short_message ?></td>
+                                                    <td><?php echo $detail->long_message ?></td>
+                                                    <td><?php echo $detail->action_url ?></td>
+                                                    <td><?php echo $detail->your_system_id ?></td>
+                                                    <td><?php echo $detail->end_point ?></td>
+                                                    <td><?php echo $detail->secret ?></td>
                                                 <?php
                                                 }
                                             }
                                             ?>
-                                        </td></tr>
+                                        </tr>
                                 </table></td>
-                                <td><?php
-                                            if (isset($topic_id) != 0)
+                                <td><?php 
+                                            if (isset($topic_id) && $topic_id != 0)
                                             { ?>
-                                   <a href="{{ URL::to('/api/'.$topic_id) }}" >
-                                        API
+                                   <a href="{{ URL::to('/api/'.$topic_id.'/'.$relay) }}" >
+                                        Create API of selected topic
                                     </a> 
                                         <?php } ?>
                                 </td>

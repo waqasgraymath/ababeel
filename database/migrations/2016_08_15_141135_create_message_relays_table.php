@@ -18,7 +18,7 @@ class CreateMessageRelaysTable extends Migration
             $table->index('topic_id');            
             $table->string('title')->nullable();
             $table->mediumText('short_message')->nullable();
-            $table->mediumText('long_message');
+            $table->mediumText('long_message')->nullable();
             $table->string('action_url')->nullable();
             $table->index('action_url');
             $table->string('your_system_id')->nullable();

@@ -13,17 +13,21 @@ and open the template in the editor.
     <body>
         <div>
             <h3>API Ping Check</h3>
-            <table>
-                <tr><th></th><th></th></tr>
-                <tr><td>Your API Secret</td><td><input type="text" id="secret" name="secret" /></td></tr>
-                <tr><td>End Point</td><td><input type="text" id="end_point" name="end_point" /></td></tr>
-                <br />
-                <tr><td>Your System Id</td><td><input type="text" id="your_system_id" name="your_system_id" /></td></tr>
-                <tr><td>Title</td><td><input type="text" id="Title" name="Title" /></td></tr>
-                <tr><td>Short Message</td><td><textarea id="short_message" name="short_message" ></textarea></td></tr>
-                <tr><td>Long Message</td><td><textarea id="long_message" name="long_message" ></textarea></td></tr>
-                <tr><td>Action Url</td><td><input type="text" id="action_url" name="action_url" /></td></tr>
-            </table>
+            <form action="{{ route('api_ping_check_store') }}" method="post" >
+                <table>
+                    <tr><th></th><th></th></tr>
+                    <tr><td>Your API Secret</td><td><input readonly="readonly" type="text" id="secret" 
+                                                           value="<?php echo rand('1000', '50000'); ?>" 
+                        name="secret" /></td></tr>
+                    <tr><td>End Point</td><td><input type="text" readonly="readonly"
+                            value="api/relay/<?php echo $topic_id; ?>" id="end_point" name="end_point" /></td></tr>
+                    <br />
+
+                    <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+                    <input type="hidden" name="topic_id" value="<?php echo $topic_id; ?>">
+                    <tr><td></td><td><input type="submit" value="submit" /></td></tr>
+                </table>
+            </form>
         </div>
     </body>
 </html>

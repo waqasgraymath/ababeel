@@ -33,15 +33,18 @@ Route::post('create_topic_on_demand', [
 Route::post('create_api_on_demand', [
     'as' => 'api_on_demand_store', 'uses' => 'MainController@add_api_on_demand'
 ]);
+Route::post('create_api_ping_check', [
+    'as' => 'api_ping_check_store', 'uses' => 'MainController@add_api_ping_check'
+]);
 Route::post('create_topic_not_pinged', [
     'as' => 'not_pinged_store', 'uses' => 'MainController@add_not_pinged'
 ]);
-Route::get('dashboard', [
+Route::get('dashboard/{id?}', [
     'as' => 'dashboard', 'uses' => 'MainController@dashboard'
 ]);
 Route::get('topic_detail/{id}', [
     'as' => 'topic_detail', 'uses' => 'MainController@topic_detail'
 ]);
-Route::get('api/{id}', [
+Route::get('api/{id}/{relay}', [
     'as' => 'api', 'uses' => 'MainController@api'
 ]);
