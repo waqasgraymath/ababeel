@@ -18,7 +18,8 @@ class CreateLogsTable extends Migration
             $table->index('topic_id');
             $table->integer('message_relay_id')->unsigned();            
             $table->index('message_relay_id');                        
-            $table->enum('executed_on', ['success', 'failure']);
+            $table->string('executed_on')->nullable();
+            $table->enum('status', ['success', 'failure']);
             $table->timestamps();
         });
     }

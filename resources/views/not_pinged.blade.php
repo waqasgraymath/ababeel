@@ -31,7 +31,8 @@ and open the template in the editor.
                     <tr><td>Threshold</td>
                         <td>
                             <input type="text" id="occurance" name="occurance" />Times in
-                            <select id="intervals" name="intervals" >
+                            <input type="text" id="intervals" name="intervals" />
+                            <select id="time_unit" name="time_unit" >
                                 <option value="minutes" >minutes</option>
                                 <option value="hours" >hours</option>
                                 <option value="days" >days</option>

@@ -42,9 +42,15 @@ Route::post('create_topic_not_pinged', [
 Route::get('dashboard/{id?}', [
     'as' => 'dashboard', 'uses' => 'MainController@dashboard'
 ]);
+Route::get('execute_cron', [
+    'as' => 'execute', 'uses' => 'MainController@execute_cron'
+]);
 Route::get('topic_detail/{id}', [
     'as' => 'topic_detail', 'uses' => 'MainController@topic_detail'
 ]);
 Route::get('api/{id}/{relay}', [
     'as' => 'api', 'uses' => 'MainController@api'
+]);
+Route::get('log/{id}/{relay}', [
+    'as' => 'log', 'uses' => 'MainController@log'
 ]);

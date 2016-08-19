@@ -92,6 +92,7 @@ class MainController extends Controller
         $topic->pn = $request->pn;
         $topic->occurance = $request->occurance;
         $topic->intervals = $request->intervals;
+        $topic->time_unit = $request->time_unit;
 
         $topic->save();
 
@@ -127,6 +128,66 @@ class MainController extends Controller
             'topic_id' => $topic_id]);
     }
 
+    public function execute_cron(Request $request)
+    {
+//        URL for cron
+//        http://localhost/ababeel/public/execute_cron?r=22&t=1&s=25863&st=success&e=2016-08-19 08:03:01
+
+        $message_relays = DB::table('message_relays')
+                ->where('topic_id', $request->t)
+                ->where('id', $request->r)
+                ->where('secret', $request->s)
+                ->get();
+
+        if (empty($message_relays))
+        {
+            abort(403, 'Unauthorized action.');
+        }
+        else
+        {
+            $log = new Log;
+            $log->topic_id = $request->t;
+            $log->message_relay_id = $request->r;
+            $log->executed_on = $request->e;
+            $log->status = $request->st;
+            $log->save();
+
+            $topics = DB::table('topics')
+                    ->where('id', $request->t)
+                    ->where('active', 1)
+                    ->get();
+
+            if ($topics[0]->relay == 'on demand')
+            {
+                if ($topics[0]->active == 1)
+                {
+                    if ($topics[0]->email == 1)
+                    {
+//                    Send Email
+                    }
+                    if ($topics[0]->sms == 1)
+                    {
+//                    Send SMS                        
+                    }
+                    if ($topics[0]->pn == 1)
+                    {
+//                        SND PN push notification parse
+                    }
+                }
+            }
+            else
+            {
+//                First take the values from the occurances and intervals and check
+//                How many times the cron has executed so far. 
+//                And show the result.
+            }
+            print_r($topics[0]->relay);
+        }
+
+
+        exit;
+    }
+
     public function api($topic_id, $relay)
     {
         if ($relay == 'on demand')
@@ -141,6 +202,20 @@ class MainController extends Controller
         {
             return redirect()->route('dashboard');
         }
+    }
+
+    public function log($topic_id, $relay_id)
+    {
+        $logs = DB::table('logs')
+                ->where('topic_id', $topic_id)
+                ->where('message_relay_id', $relay_id)
+                ->get();
+        
+        $topic_details = MessageRelay::where('topic_id', $topic_id)->take(10)->get();
+        $topics = DB::table('topics')->get();
+        
+        return view('dashboard', ['topics' => $topics, 'details' => $topic_details,
+            'topic_id' => $topic_id, 'logs' => $logs]);
     }
 
 }
